@@ -27,9 +27,26 @@ def emotion_detector(text_to_analyze) :
         joy = emotions.get("joy")
         sadness = emotions.get("sadness")
 
+        # New
+        # Create a dictionary mapping emotions to their scores
+        emotion_scores = {
+            'anger': anger,
+            'disgust': disgust,
+            'fear': fear,
+            'joy': joy,
+            'sadness': sadness
+        }
+
+        # Determine the dominant emotion by finding the key with the highest score
+        dominant_emotion = max(
+            (emotion for emotion in emotion_scores if emotion_scores[emotion] is not None),
+            key=lambda emotion: emotion_scores[emotion],
+            default=None
+        )
+
         # Determine the dominant emotion
-        emotion_scores = [anger, disgust, fear, joy, sadness]
-        dominant_emotion = max(emotion_scores, key=lambda x: (x is not None, x), default=None)
+        # emotion_scores = [anger, disgust, fear, joy, sadness]
+        # dominant_emotion = max(emotion_scores, key=lambda x: (x is not None, x), default=None)
 
     else:
         # Return default values if the response code is not 200
@@ -45,4 +62,3 @@ def emotion_detector(text_to_analyze) :
         'sadness': sadness,
         'dominant_emotion': dominant_emotion
     }
-    
