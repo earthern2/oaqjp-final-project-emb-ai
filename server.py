@@ -1,14 +1,32 @@
+"""
+server.py
+
+This file contains the Flask application for emotion detection. 
+It provides an endpoint to analyze the sentiment of the given text 
+and returns the dominant emotion along with its respective scores.
+
+The application uses the emotion detection function from the EmotionDetection package.
+"""
+
 from flask import Flask, request, jsonify
-from EmotionDetection import emotion_detector
+from EmotionDetection.emotion_detection import emotion_detector
 
 app = Flask(__name__)
 
-# Route with the decorator as specified
 @app.route("/emotionDetector", methods=["POST"])
 def detect_emotion():
-    # Get the text from the request
+    """
+    Detects the dominant emotion from the provided text input.
+    
+    The function processes the input text, calls the emotion detector function,
+    and returns the dominant emotion or an error message for invalid input.
+    
+    Returns:
+        jsonify: A JSON response containing the dominant emotion or an error message.
+    """
+    # Get input from the request
     data = request.get_json()
-    text_to_analyze = data.get("text", "")
+    text_to_analyze = data.get('text', '')
 
     # Call the emotion detector function
     result = emotion_detector(text_to_analyze)
@@ -28,25 +46,9 @@ def detect_emotion():
             f"The dominant emotion is {result['dominant_emotion']}."
         )
 
-    # if not text_to_analyze:
-    #     return jsonify({"error": "No text provided"}), 400
-
-    # # Use the emotion_detector function
-    # emotions = emotion_detector(text_to_analyze)
-
-    # # Format the response as requested
-    # response_message = (
-    #     f"For the given statement, the system response is "
-    #     f"'anger': {emotions['anger']}, "
-    #     f"'disgust': {emotions['disgust']}, "
-    #     f"'fear': {emotions['fear']}, "
-    #     f"'joy': {emotions['joy']} and "
-    #     f"'sadness': {emotions['sadness']}. "
-    #     f"The dominant emotion is {emotions['dominant_emotion']}."
-    # )
-
-    # Return the formatted message
+    # Return the final response
     return jsonify({"response": response_message})
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5000)
+    app.run(debug=True, host='127.0.0.1', port=5000)
+    
